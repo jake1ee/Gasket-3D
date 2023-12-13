@@ -1,0 +1,202 @@
+@charset "utf-8";
+/* CSS Document */
+
+*
+{
+	margin 		: 0px;
+	padding 	: 0px;
+	font-family : openSans;
+	font-size 	: 15px;
+	font-weight : bolder;
+}
+
+html
+{
+	width 			: 1366px;
+	height 			: 720px;
+	padding 		: 0;
+	margin 			: 0;
+	text-decoration : none;
+}
+
+.selection
+{
+	width 			: 270px;
+	height 			: 700px;
+	left 			: 10px;
+	top 			: 0;
+	position 		: absolute;
+	background 		: #2a272d;
+	border 			: 10px solid #2a272d;
+	border-radius 	: 10px 0 0 10px;
+}
+
+.selection ul li
+{
+	color 			: rgba(230, 230, 230, 1);
+	list-style 		: none;
+	border-bottom 	: 1px solid rgba(100,100,100,0.3);
+}
+
+.canvas
+{
+	width 			: 1200px;
+	height 			: 700px;
+	left 			: 300px;
+	top 			: 0;
+	position 		: absolute;
+	border 			: 10px solid #5c4248;
+	border-radius 	: 0 10px 10px 0;
+}
+
+.grid-container1
+{
+ 	display 				: grid;
+ 	grid-template-columns 	: 70px 70px 70px 70px;
+	grid-template-rows 		: 30px 50px;
+	padding					: 5px;
+	margin-top 				: 30px;
+}
+
+.pt1 
+{
+	position 		: relative;
+	overflow 		: hidden;
+	width 			: 32px;
+	height 			: 32px;
+	border 			: solid 2px #ffffff;
+	border-radius 	: 10px;
+}
+
+.pt2
+{
+	position 	: relative;
+	left 		: -5px;
+	top 		: -5px;
+	width 		: 60px;
+	height 		: 60px;
+	border 		: none;
+}
+
+.pt1:hover
+{
+	animation : anim 0.5s ease 0s 1 normal forwards;
+}
+
+.grid-container2
+{
+ 	display 				: grid;
+ 	grid-template-columns 	: 170px 100px;
+	grid-template-rows 		: 55px;
+	padding					: 5px 20px 5px 20px;
+}
+
+.sub1 .slide
+{
+	width 		: 110px;
+	padding-top : 10px;
+}
+
+.sub2
+{
+	width  			: 50px;
+	height 			: 50px;
+	border 			: 2px solid #ffffff;
+	border-radius 	: 5px;
+	background 		: #000000;
+	margin-left 	: 5px;
+}
+
+.sub2 p
+{
+	text-align 	: center;
+	position 	: relative;
+	top 		: 25%;
+}
+
+.addition
+{
+	width 			: 240px;
+	height 			: 190px;
+	margin 			: 10px 10px 20px 10px;;
+	background 		: #000000;
+	border 			: 2px solid #ffffff;
+	border-radius 	: 15px;
+}
+
+.grid-container3
+{
+	display 				: grid;
+ 	grid-template-columns 	: 170px 100px;
+	grid-template-rows 		: 35px 35px 35px 35px 35px;
+	padding					: 15px 20px 15px 20px;
+}
+
+.grid-container3 .title p
+{
+	font-size : 15px;
+}
+
+.checkbox #checkbox1, .checkbox #checkbox2, .checkbox #checkbox3
+{
+	width : 20px;
+	height : 20px;
+}
+
+#additional
+{
+	padding : 15px 20px 5px 20px;
+}
+
+.button
+{
+	padding : 10px;
+}
+
+.start #start,#stop
+{
+	width 			: 240px;
+	height 			: 40px;
+	border 			: none;
+	border-radius 	: 10px;
+	outline 		: none;
+	background 		: #16f5e5;
+}
+
+
+
+.start #start:hover, #stop:hover
+{
+	animation: bounce 1s;
+}
+
+
+.start #start:active, #stop:hover
+{
+  background-color 	: #21ff94;
+  box-shadow 		: 0 2px #666666;
+  transform 		: translateY(2px);
+}
+
+
+@keyframes anim
+{
+	0% 
+	{
+		border : solid 3px #dddddd;
+	}
+	
+	100%
+	{
+		border 		: solid 3px #ffffff;
+		box-shadow 	: 0 0 15px #ffffff;
+		transform 	: scale(1.4);
+	}
+}
+
+@keyframes bounce 
+{
+	0%, 20%, 60%, 100% 	{transform: translateY(0);}
+	40% 				{transform: translateY(-10px);}
+	80% 				{transform: translateY(-5px);}
+}
