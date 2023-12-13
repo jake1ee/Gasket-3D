@@ -208,7 +208,7 @@ function configureTexture(image)
 }
 
 // Handles the animation logic based on the current stage of the animation
-function rotation()
+function animation()
 {
     // Animation transformations and stage control
 	var count = (spdNum / 150);	
@@ -449,7 +449,7 @@ function render()
 	if(loop)
 	{
 		disableBtn();// Disables UI controls during animation
-		rotation();
+		animation();
 	}
 	else if(!loop )
 	{
