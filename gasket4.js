@@ -1,31 +1,34 @@
 // JavaScript Document
-var canvas;
-var gl;
+var canvas; // HTML canvas element for rendering
+var gl; // WebGL context for rendering on canvas
 
-var NumTimesToSubdivide = 3, scaleNum = 1.5;
-var spdNum = 3, animCount = 1, secCount = 1;
-var loop = false, flag1 = false, large = false;
+// Control variables
+var NumTimesToSubdivide = 3, scaleNum = 1.5; // Subdivision level and scale factor
+var spdNum = 3, animCount = 1, secCount = 1; // Speed of animation, animation stage counters
+var loop = false, flag1 = false, large = false; // Animation control flags
 
-var points = [], colors = [], theta = [0, 0, 0], move = [0, 0, 0], start_but, stop_but;
-var baseColors, color1, color2, color3, color4, subdivision_slide, speed_slide, vertices, customize;
-var hexadecimal = [255/255, 53/255, 97/255, 0/255, 236/255, 255/255, 55/255, 60/255, 103/255, 0/255, 0/255, 0/255];
+// Arrays for storing vertices, colors, rotations, and movements
+var points = [], colors = [], theta = [0, 0, 0], move = [0, 0, 0];
 
+// HTML elements for interaction
+var start_but, stop_but; // Buttons for starting and stopping animation
+var baseColors, color1, color2, color3, color4; // Color pickers
+var subdivision_slide, speed_slide; // Sliders for subdivision and speed
+var vertices, customize; // Vertices of the object and animation frame request id
+var hexadecimal = [255/255, 53/255, 97/255, 0/255, 236/255, 255/255, 55/255, 60/255, 103/255, 0/255, 0/255, 0/255]; // Base color values
 
-var modelViewMatrix, projectionMatrix;
-var modelViewMatrixLoc, projectionMatrixLoc;
-
+// Texture variables
 var texture, texCoordLoc, texCoordsArray = [];
-var texCoord = 
-[
-    vec2(0, 0),
-    vec2(0, 1),
-    vec2(1, 1),
-    vec2(1, 0)
-];
+// Texture coordinates
+var texCoord = [vec2(0, 0), 
+				vec2(0, 1), 
+				vec2(1, 1), 
+				vec2(1, 0)]; 
 
-
+// Initializes WebGL and sets up the environment				
 window.onload = function init()
 {
+	// WebGL setup and shader initialization
     canvas = document.getElementById("gl-canvas");
 	color1 = document.getElementById("color1");
 	color2 = document.getElementById("color2");
@@ -102,7 +105,7 @@ window.onload = function init()
 	projectionMatrix = ortho(-6, 6, -3.5, 3.5, 5, -5); // left, right, bottom, top, near, far
 	gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
-/*------------------------------------------------------------------------------------------------*/ 
+	// Event listeners for HTML controls (color pickers, sliders, buttons)
 	
 	color1.onchange = function()
 	{
@@ -171,17 +174,26 @@ window.onload = function init()
     render();
 };
 
+// Utility function to check if a value is a power of 2
 function isPowerOf2(value) 
 {
   return (value & (value - 1)) == 0;
 }
 
+// Configures texture for the WebGL object
 function configureTexture(image) 
 {
+	// Creates a new WebGL texture and binds it for configuration.
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
+
+	// Sets up flipping of the image on the y-axis.
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+	// Uploads the image to the texture's space in GPU memory.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+	
+	// Sets texture parameters based on whether the image dimensions are a power of two.
 	if (isPowerOf2(image.width) && isPowerOf2(image.height)) 
 	{
 		gl.generateMipmap(gl.TEXTURE_2D);
@@ -191,14 +203,17 @@ function configureTexture(image)
 	
 	else 
 	{
+		// Set texture parameters for non-power-of-two textures.
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     }
 }
 
+// Handles the animation logic based on the current stage of the animation
 function animationStart()
 {
+    // Animation transformations and stage control
 	var count = (spdNum / 150);	
 	switch(animCount)
 	{		
@@ -232,8 +247,10 @@ function animationStart()
 	} // end switch
 }
 
+// Sets the base colors for the object based on hexadecimal values
 function setColor(hexadecimal)
 {
+    // Assign colors to baseColors from hexadecimal array
 	baseColors = 
 	[
         vec3(hexadecimal[0], hexadecimal[1], hexadecimal[2]),
@@ -243,6 +260,7 @@ function setColor(hexadecimal)
     ];
 }
 
+// Creates a triangle with vertices and color for rendering
 function triangle(a, b, c, color)
 {
     // add colors and vertices for one triangle
@@ -295,15 +313,19 @@ function divideTetra(a, b, c, d, count)
     }
 }
 
+// Updates the points data in the buffer for rendering
 function update()
 {
+	// Recalculate points and update buffer data
 	points = [];
     divideTetra(vertices[0], vertices[1], vertices[2], vertices[3], NumTimesToSubdivide);
     gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(points));
 }
 
+// Disables interactive buttons during animation
 function disableBtn()
 {
+	// Disable UI controls
 	color1.disabled = true;
 	color2.disabled = true;
 	color3.disabled = true;
@@ -312,8 +334,10 @@ function disableBtn()
 	start_but.disabled = true;
 }
 
+// Enables interactive buttons after animation
 function enableBtn()
 {
+	// Enable UI controls
 	color1.disabled = false;
 	color2.disabled = false;
 	color3.disabled = false;
@@ -322,17 +346,23 @@ function enableBtn()
 	start_but.disabled = false;
 }
 
+// Main rendering function, called for each frame
 function render()
 {
+	 // Clears the color and depth buffer.
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	// Checks if the animation loop is active and updates the model accordingly
 	if(loop)
 	{
-		disableBtn();
+		disableBtn();// Disables UI controls during animation
+
+		// If flag1 is true, execute the main animation logic.
 		if(flag1)
 		{
 			animationStart(); 
 		}
-		else if(!flag1)
+		else if(!flag1) //Additional animation steps or transformations
 		{
 				switch(secCount)
 			{
@@ -349,7 +379,7 @@ function render()
 	}
 	else if(!loop )
 	{
-		enableBtn();
+		enableBtn(); // Enables UI controls when the animation is not
 	}
 	
 	modelViewMatrix = mat4();
@@ -363,5 +393,6 @@ function render()
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.uniform1i(texCoordLoc, 0);
     gl.drawArrays(gl.TRIANGLES, 0, points.length);
+	 // Request the next frame for animation
 	customize = window.requestAnimationFrame(render);
 }
