@@ -4,8 +4,8 @@ var gl; // WebGL context for rendering on canvas
 
 // Control variables
 var NumTimesToSubdivide = 3, scaleNum = 1.5; // Subdivision level and scale factor
-var spdNum = 3, animCount = 1, secCount = 1; // Speed of animation, animation stage counters
-var loop = false, flag1 = false, large = false; // Animation control flags
+var spdNum = 3, animCount = 1; // Speed of animation, animation stage counters
+var loop = false; // Animation control flags
 
 // Arrays for storing vertices, colors, rotations, and movements
 var points = [], colors = [], theta = [0, 0, 0], move = [0, 0, 0];
@@ -155,7 +155,6 @@ window.onload = function init()
 	
 	start_but.onclick = function()
 	{
-		flag1 = true;
 		loop = true;
 	};
 
@@ -165,10 +164,7 @@ window.onload = function init()
 		move = [0, 0, 0];
 		scaleNum = 1.5;
 		animCount = 1;
-		secCount = 1;
 		loop = false;
-		large = false;
-		flag1 = false;
 	};
 	
 
@@ -212,13 +208,14 @@ function configureTexture(image)
 }
 
 // Handles the animation logic based on the current stage of the animation
-function animationStart()
+function rotation()
 {
     // Animation transformations and stage control
 	var count = (spdNum / 150);	
 	switch(animCount)
-	{		
-		case 1: //Rotate 180 left
+	{
+		
+		case 1:
 			theta[2] += spdNum;
 			if(theta[2] > 180)
 			{
@@ -227,24 +224,120 @@ function animationStart()
 			}
 			break;
 				
-		case 2: //Rotate 180 right
+		case 2:
 			theta[2] -= spdNum;
 			if(theta[2] < -180)
 			{
 				theta[2] = -180;
-				animCount ++;
+				animCount++;
 			}
 			break;
 
-		case 3: //Rotate back to origin
-		theta[2] += spdNum;
+		case 3:
+			theta[2] += spdNum;
 			if(theta[2] > 0)
 			{
 				theta[2] = 0;
-				animCount = 1;
-				flag1 = false; 
+				animCount ++;
 			}
 			break;
+		case 4: 
+			if(scaleNum < 4 ) 
+			{
+				scaleNum += 0.05; 
+				move[1] -= 0.015;
+			}
+			else
+			{
+				large = true; 
+				animCount++;
+			}
+			break;
+		case 5: 
+			if(scaleNum > 1.5 ) 
+			{
+				scaleNum -= 0.05; 
+				move[1] += 0.015;
+			}
+			else
+			{
+				large = false; 
+				animCount++; 
+			}
+			break;
+
+		case 6:
+
+			move[0] -= (count * 12 / 7);
+			move[1] -= count;
+			if(move[1] < -2.80)
+			{
+				move[0] = -4.80;
+				move[1] = -2.80;
+				animCount++;
+			}
+			break;
+			
+		case 7:
+			move[0] += (count * 96 / 49);
+			move[1] += count;
+			if(move[1] > 2.1)
+			{
+				move[0] = 4.80;
+				move[1] = 2.10;
+				animCount++;
+			}
+			break;
+			
+		case 8:
+			move[0] -= (count * 16 / 7);
+			move[1] -= count;
+			if(move[1] < 0)
+			{
+				move[0] = 0;
+				move[1] = 0;
+				animCount++;
+			}
+			break;
+			
+		case 9:
+				move[0] += (count * 12 / 7);
+				move[1] -= count;
+				if(move[1] < -2.80)
+				{
+					move[0] = 4.80;
+					move[1] = -2.80;
+					animCount++;
+				}	
+			
+			break;
+			
+		case 10:
+				move[0] -= (count * 96 / 49);
+				move[1] += count;
+				if(move[1] > 2.10)
+				{
+					move[0] = -4.80;
+					move[1] = 2.10;
+					animCount++;
+				}
+			
+			break;
+			
+		case 11:
+				move[0] += (count * 16 / 7);
+				move[1] -= count;
+				if(move[1] < 0)
+				{
+					move[0] = 0;
+					move[1] = 0;
+					animCount = 6;
+				}
+			break;	
+			
+			
+			
+
 	} // end switch
 }
 
@@ -356,26 +449,7 @@ function render()
 	if(loop)
 	{
 		disableBtn();// Disables UI controls during animation
-
-		// If flag1 is true, execute the main animation logic.
-		if(flag1)
-		{
-			animationStart(); 
-		}
-		else if(!flag1) //Additional animation steps or transformations
-		{
-				switch(secCount)
-			{
-				case 1: 
-					if(scaleNum < 4 && !large) {scaleNum += 0.05; move[1] -= 0.015;}
-					else{large = true; secCount++;}
-					break;
-				case 2:
-					if(scaleNum > 1.5 && large) {scaleNum -= 0.05; move[1] += 0.015;}
-					else{large = false; secCount = 1; flag1 = true}
-					break;
-			}
-		}
+		rotation();
 	}
 	else if(!loop )
 	{
