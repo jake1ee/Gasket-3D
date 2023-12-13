@@ -167,6 +167,7 @@ window.onload = function init()
 		animCount = 1;
 		secCount = 1;
 		loop = false;
+		large = false;
 		flag1 = false;
 	};
 	
@@ -280,7 +281,6 @@ function triangle(a, b, c, color)
 function tetra(a, b, c, d)
 {
     // tetrahedron with each side using a different color
-
     triangle(a, c, b, 0);
     triangle(a, c, d, 1);
     triangle(a, b, d, 2);
