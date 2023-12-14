@@ -3,7 +3,7 @@ var canvas; // HTML canvas element for rendering
 var gl; // WebGL context for rendering on canvas
 
 // Control variables
-var NumTimesToSubdivide = 3, scaleNum = 1.5; // Subdivision level and scale factor
+var NumTimesToSubdivide = 3, scaleNum = 1; // Subdivision level and scale factor
 var spdNum = 3, animCount = 1; // Speed of animation, animation stage counters
 var loop = false; // Animation control flags
 
@@ -162,7 +162,7 @@ window.onload = function init()
 	{
 		theta = [0, 0, 0];
 		move = [0, 0, 0];
-		scaleNum = 1.5;
+		scaleNum = 1;
 		animCount = 1;
 		loop = false;
 	};
@@ -242,10 +242,10 @@ function animation()
 			}
 			break;
 		case 4: 
-			if(scaleNum < 4 ) 
+			if(scaleNum < 1.5 ) 
 			{
-				scaleNum += 0.05; 
-				move[1] -= 0.015;
+				scaleNum += 0.005; 
+				move[1] -= 0.00015;
 			}
 			else
 			{
@@ -253,20 +253,8 @@ function animation()
 				animCount++;
 			}
 			break;
-		case 5: 
-			if(scaleNum > 1.5 ) 
-			{
-				scaleNum -= 0.05; 
-				move[1] += 0.015;
-			}
-			else
-			{
-				large = false; 
-				animCount++; 
-			}
-			break;
 
-		case 6:
+		case 5:
 
 			move[0] -= (count * 12 / 7);
 			move[1] -= count;
@@ -278,7 +266,7 @@ function animation()
 			}
 			break;
 			
-		case 7:
+		case 6:
 			move[0] += (count * 96 / 49);
 			move[1] += count;
 			if(move[1] > 2.1)
@@ -289,7 +277,7 @@ function animation()
 			}
 			break;
 			
-		case 8:
+		case 7:
 			move[0] -= (count * 16 / 7);
 			move[1] -= count;
 			if(move[1] < 0)
@@ -300,7 +288,7 @@ function animation()
 			}
 			break;
 			
-		case 9:
+		case 8:
 				move[0] += (count * 12 / 7);
 				move[1] -= count;
 				if(move[1] < -2.80)
@@ -312,7 +300,7 @@ function animation()
 			
 			break;
 			
-		case 10:
+		case 9:
 				move[0] -= (count * 96 / 49);
 				move[1] += count;
 				if(move[1] > 2.10)
@@ -324,14 +312,14 @@ function animation()
 			
 			break;
 			
-		case 11:
+		case 10:
 				move[0] += (count * 16 / 7);
 				move[1] -= count;
 				if(move[1] < 0)
 				{
 					move[0] = 0;
 					move[1] = 0;
-					animCount = 6;
+					animCount = 5;
 				}
 			break;	
 			
