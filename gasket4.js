@@ -223,13 +223,6 @@ function animation()
 				animCount++;
 			}
 			break;
-			theta[2] += spdNum;
-			if(theta[2] > 180)
-			{
-				theta[2] = 180;
-				animCount++;
-			}
-			break;
 				
 		case 2:
 			theta[2] += spdNum;
@@ -241,13 +234,14 @@ function animation()
 			break;
 
 		case 3:
-			theta[2] += spdNum;
-			if(theta[2] > 0)
+			theta[2] -= spdNum;
+			if(theta[2] < 0)
 			{
 				theta[2] = 0;
 				animCount ++;
 			}
 			break;
+
 		case 4: 
 			if(scaleNum < 1.5 ) 
 			{
